@@ -39,7 +39,8 @@ var vm = new Vue({
 	el:'#rrapp',
 	data:{
 		q:{
-			tableName: null
+			tableName: null,
+            moduleName: null
 		}
 	},
 	methods: {
@@ -54,7 +55,7 @@ var vm = new Vue({
             if(tableNames == null){
                 return ;
             }
-            location.href = "sys/generator/code?tablePrefix="+vm.q.tableName+"&tables=" + tableNames.join();
+            location.href = "sys/generator/code?moduleName="+vm.q.moduleName+"&tablePrefix="+vm.q.tableName+"&tables=" + tableNames.join();
 		}
 	}
 });

@@ -36,6 +36,7 @@ public class GenUtils {
         templates.add("template/Service.java.vm");
         templates.add("template/ServiceImpl.java.vm");
         templates.add("template/Controller.java.vm");
+        templates.add("template/ControllerApi.java.vm");
         templates.add("template/menu.sql.vm");
 
         templates.add("template/index.vue.vm");
@@ -48,7 +49,8 @@ public class GenUtils {
      * 生成代码
      */
     public static void generatorCode(Map<String, String> table,
-                                     List<Map<String, String>> columns, ZipOutputStream zip,String tablePrefix) {
+                                     List<Map<String, String>> columns, ZipOutputStream zip,String tablePrefix,
+                                     String moduleName) {
         //配置信息
         Configuration config = getConfig();
         boolean hasBigDecimal = false;
@@ -57,7 +59,7 @@ public class GenUtils {
         tableEntity.setTableName(table.get("tableName" ));
         tableEntity.setComments(table.get("tableComment" ));
         //表前缀设置
-        if (StringUtils.isEmpty(tablePrefix)) tablePrefix =config.getString("tablePrefix" );
+        if (StringUtils.isEmpty(tablePrefix)||tablePrefix=="null") tablePrefix =config.getString("tablePrefix" );
         //表名转换成Java类名
         String className = tableToJava(tableEntity.getTableName(), tablePrefix);
         tableEntity.setClassName(className);
@@ -115,7 +117,8 @@ public class GenUtils {
         map.put("hasBigDecimal", hasBigDecimal);
         map.put("mainPath", mainPath);
         map.put("package", config.getString("package" ));
-        map.put("moduleName", config.getString("moduleName" ));
+        if (StringUtils.isEmpty(moduleName)|| moduleName=="null") moduleName=config.getString("moduleName" );
+        map.put("moduleName", moduleName);
         map.put("author", config.getString("author" ));
         map.put("email", config.getString("email" ));
         map.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
@@ -184,7 +187,7 @@ public class GenUtils {
         }
 
         if (template.contains("Dao.java.vm" )) {
-            return packagePath + "dao" + File.separator + className + "mapper.java";
+            return packagePath + "dao" + File.separator + className + "Mapper.java";
         }
 
         if (template.contains("Service.java.vm" )) {
@@ -199,8 +202,12 @@ public class GenUtils {
             return packagePath + "controller" + File.separator + className + "Controller.java";
         }
 
+        if (template.contains("ControllerApi.java.vm" )) {
+            return packagePath + "ControllerApi" + File.separator + className + "ControllerApi.java";
+        }
+
         if (template.contains("Dao.xml.vm" )) {
-            return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + moduleName + File.separator + className + "mapper.xml";
+            return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + moduleName + File.separator + className + "Mapper.xml";
         }
 
         if (template.contains("menu.sql.vm" )) {

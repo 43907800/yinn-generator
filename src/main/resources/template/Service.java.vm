@@ -1,10 +1,15 @@
-package ${package}.${moduleName}.service;
+package ${package}.manage_${moduleName}.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import ${package}.entity.${moduleName}.${className};
+import ${package}.manage_${className}.${moduleName}.${className}Mapper;
 
-import java.util.Map;
-
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tentwelve.model.response.CommonCode;
+import com.tentwelve.model.response.QueryResponseResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 /**
  * ${comments}
  *
@@ -12,17 +17,17 @@ import java.util.Map;
  * @email ${email}
  * @date ${datetime}
  */
+@Service
 public class ${className}Service {
 
-    public QueryResponseResult queryPage(Page<${className}> page) {
-        IPage<${className}> page = this.page(
-                new Query<${className}>().getPage(page),
-                new QueryWrapper<${className}>()
-        );
-##        IPage<${className}> ${className}Page = labelmapper.queryPage(page, new QueryWrapper<>());
-##        QueryResult queryResult = new QueryResult();
-##        queryResult.setList(${className}Page.getRecords());
-        return new QueryResponseResult(CommonCode.SUCCESS,queryResult) ;
+    @Autowired
+    private ${className}Mapper ${classname}Mapper;
+
+
+    public QueryResponseResult queryPage(Integer size, Integer current,${className} ${classname}){
+        IPage<${className}> ${classname}IPage = ${classname}Mapper.selectPage(new Page(current,size), new QueryWrapper<>(${classname}));
+        return new QueryResponseResult(CommonCode.SUCCESS,${classname}IPage) ;
     }
+
 }
 
