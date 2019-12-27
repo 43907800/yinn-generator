@@ -1,8 +1,7 @@
 package ${package}.${moduleName}.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import ${mainPath}.guards.common.utils.PageUtils;
-import ${package}.${moduleName}.entity.${className}Entity;
+import ${package}.entity.${moduleName}.${className};
 
 import java.util.Map;
 
@@ -13,8 +12,17 @@ import java.util.Map;
  * @email ${email}
  * @date ${datetime}
  */
-public interface ${className}Service extends IService<${className}> {
+public class ${className}Service {
 
-    PageUtils queryPage(Map<String, Object> params);
+    public QueryResponseResult queryPage(Page<${className}> page) {
+        IPage<${className}> page = this.page(
+                new Query<${className}>().getPage(page),
+                new QueryWrapper<${className}>()
+        );
+##        IPage<${className}> ${className}Page = labelmapper.queryPage(page, new QueryWrapper<>());
+##        QueryResult queryResult = new QueryResult();
+##        queryResult.setList(${className}Page.getRecords());
+        return new QueryResponseResult(CommonCode.SUCCESS,queryResult) ;
+    }
 }
 
