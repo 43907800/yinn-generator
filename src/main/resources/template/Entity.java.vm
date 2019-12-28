@@ -27,7 +27,7 @@ public class ${className} implements Serializable {
 	 * $column.comments
 	 */
 	#if($column.columnName == $pk.columnName)
-@TableId
+@TableId(type = IdType.ID_WORKER_STR)
 	#end
 private $column.attrType $column.attrname;
 #end
